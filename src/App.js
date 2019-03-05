@@ -4,6 +4,7 @@ import Users from "../src/Components/Users/Users";
 import Layout from "../src/Containers/Layout/Layout";
 import AddUser from "../src/Components/AddUser/AddUser";
 import { Route } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 class App extends Component {
   state = {
@@ -88,21 +89,32 @@ class App extends Component {
     this.setState({inputConfig:newConfig})
   }
 
+  static contextTypes = {
+    router: PropTypes.object,
+  }
+
   addNewUserHandler=(event)=>{
-    console.log('hi')
     event.preventDefault();
     let newUser={}
     newUser.id=new Date().getTime();
-    let newConfig={...this.state.config}
-    console.log(newConfig)
-    //for(let element in this.state.config )
-    /*newUser.name=this.state.inputConfig[0].value;
-    template: "Single Image Ad",
-    startDate: "2018-01-01",
-    repeat: "Daily",
-    isActive: true*/
+    let newConfig={...this.state.inputConfig}
+    for(let element in newConfig ){
+      newUser[element]=newConfig[element].value
+    }
+    if(newUser.startDate===''){
+      newUser.startDate=new Date().toISOString().slice(0,10);
+    }
+
+    let combinedUsers=[...this.state.users]
+    combinedUsers.push(newUser)
+    this.setState({users:combinedUsers},()=>{
+      this.redirect()
+    })
   }
 
+  redirect(){
+    this.context.router.history.push('/')
+  }
   render() {
     return (
       <div className="App">

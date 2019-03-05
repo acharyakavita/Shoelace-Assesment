@@ -13,7 +13,8 @@ const input = (props) => {
             inputElement = <input className={inputClasses.join(' ')} 
             type={props.config.inputType}
             placeholder={props.config.placeholder} 
-            value={props.value} 
+            value={props.config.value} 
+            required={props.config.required}
             onChange={props.changed} />;
             break;
         case 'select':
@@ -26,7 +27,7 @@ const input = (props) => {
             </select>);
             break;
         default:
-            inputElement = <input className={inputClasses.join(' ')} {...props.config} value={props.value} onChange={props.changed}/>
+            inputElement = <input className={inputClasses.join(' ')} {...props.config} value={props.config.value} onChange={props.changed}/>
     }
 
     let validationError = null;

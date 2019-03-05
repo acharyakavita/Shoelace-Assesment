@@ -13,8 +13,6 @@ const form = props => {
   }
 
   let formData = formElementsArray.map(element => {
-    console.log(<Input key={element.id} config={element.config} 
-        changed={event=>props.changeInputValues(event,element.id)}/>)
     return <Input key={element.id} config={element.config} 
     changed={event=>props.changeInputValues(event,element.id)} />;
   });
