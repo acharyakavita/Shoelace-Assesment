@@ -1,6 +1,13 @@
 .AddUser {
-    width:80%;
-    margin:5% 10%;
+    width:60%;
+    margin:5% 20%;
     border: 1px solid rgb(95, 151, 170);
     border-radius: 25px;
+}
+
+@media screen and (max-width:800px){
+    .AddUser{
+        width:80%;
+        margin:5% 10%;
+    }
 }

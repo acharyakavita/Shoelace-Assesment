@@ -1,4 +1,16 @@
 .Form{
-    width:90%;
-    margin:2% 5%;
+    width:70%;
+    margin:2% 15%;
+}
+
+.Button{
+    padding-top:3%;
+    text-align: center;
+}
+
+@media screen and (max-width:800px){
+    .Form{
+        width:90%;
+        margin:2% 5%;
+    }
 }

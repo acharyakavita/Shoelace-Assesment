@@ -22,7 +22,6 @@ const form = props => {
     <form className={Classes.Form} onSubmit={props.addNewUSer}>
       <h3>Enter User Data</h3>
       {formData}
-      <hr />
       <div className={Classes.Button}>
         <Button click={props.addNewUSer}>Add User</Button>
       </div>
