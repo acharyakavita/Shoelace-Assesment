@@ -1,5 +1,5 @@
 import React from "react";
-
+import Button from '../../Button/Button';
 import Classes from "./User.css";
 
 const user = props => {
@@ -19,7 +19,7 @@ const user = props => {
         <p>Active &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{active}</p>
         <hr/>
         <div className={Classes.Button}>
-        <button>Modify User</button>
+        <Button>Modify User</Button>
         </div>
       </div>
 

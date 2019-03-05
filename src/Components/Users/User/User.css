@@ -1,6 +1,6 @@
 .User{
     border: 1px solid rgb(95, 151, 170);
-    border-radius: 5%;;
+    border-radius: 5%;
     padding: 3%;
     margin:2%;
 }
@@ -8,16 +8,6 @@
 .Button {
     padding-top:3%;
     text-align: center;
-}
-
-.Button button{
-    background-color: rgb(78, 158, 207);
-    border:1px solid grey;
-    height: 30px;
-    width: 100px;
-    color:white;
-    font-weight:bold;
-    border-radius:3%;
 }
 
 @media only screen and (max-width:600px){

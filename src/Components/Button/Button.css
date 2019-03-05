@@ -1,0 +1,9 @@
+.Button {
+    background-color: rgb(78, 158, 207);
+    border:1px solid grey;
+    height: 30px;
+    width: 100px;
+    color:white;
+    font-weight:bold;
+    border-radius:3%;
+}
