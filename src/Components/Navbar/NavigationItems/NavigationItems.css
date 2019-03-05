@@ -1,0 +1,26 @@
+
+.NavigationItems {
+    margin:4% 0% 0% 50%;
+    width:50%;
+    list-style: none;
+    display:flex;
+    flex-direction: row;
+    font-size:22px;
+    font-weight: bold;
+    padding:0;
+}
+
+@media screen and (min-width:601px) and (max-width:800px){
+    .NavigationItems {
+        width:50%;
+        margin-left:30%;
+    }
+}
+
+@media screen and (max-width:600px){
+    .NavigationItems {
+        width:60%;
+        margin:0 0 0 5%;
+        flex-direction: column;
+    }
+}

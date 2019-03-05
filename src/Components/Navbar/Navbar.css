@@ -1,0 +1,30 @@
+.Navbar {
+    margin:0;
+    height:70px;
+    background-color: rgb(78, 158, 207);
+    display: flex;
+    color: white;
+    width:100%;
+}
+
+.Title{
+    width:47%;
+    margin-left:3%;
+    text-align: left;
+}
+
+.Navbar nav {
+    width:50%;
+}
+
+
+@media screen and (max-width: 600px){
+    .DesktopOnly {
+        display:none;
+        background-color: rgb(78, 158, 207);
+        height:70px;
+    }
+    .Title{
+        width:80%
+    }
+}
