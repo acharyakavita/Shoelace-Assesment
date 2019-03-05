@@ -23,7 +23,7 @@ const form = props => {
       <h3>Enter User Data</h3>
       {formData}
       <div className={Classes.Button}>
-        <Button click={props.addNewUSer}>Add User</Button>
+        <Button click={props.addNewUSer}>{props.button}</Button>
       </div>
     </form>
   );

@@ -19,7 +19,7 @@ const user = props => {
         <p>Active &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;{active}</p>
         <hr/>
         <div className={Classes.Button}>
-        <Button>Modify User</Button>
+        <Button click={props.editUser}>Modify User</Button>
         </div>
       </div>
 

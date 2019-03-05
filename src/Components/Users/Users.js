@@ -7,7 +7,7 @@ const users =(props)=>{
     if(props.data.length>0){
         userData=props.data.map(user=>{
             return(
-                <User key={user.id}data={user}/>)
+                <User key={user.id} data={user} editUser={event=>props.editUser(event,user.id)} />)
         })
     }
     

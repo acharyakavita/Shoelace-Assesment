@@ -3,6 +3,7 @@ import "./App.css";
 import Users from "../src/Components/Users/Users";
 import Layout from "../src/Containers/Layout/Layout";
 import AddUser from "../src/Components/AddUser/AddUser";
+import EditUser from "../src/Components/EditUser/EditUser";
 import { Route } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -19,7 +20,8 @@ class App extends Component {
       }
     ],
     formIsValid: false,
-    inputConfig: {}
+    inputConfig: {},
+    user:{}
   };
 
   get initialState() {
@@ -132,24 +134,40 @@ class App extends Component {
     let combinedUsers = [...this.state.users];
     combinedUsers.push(newUser);
     this.setState({ users: combinedUsers }, () => {
-      this.redirect();
+      let path='/'
+          let config = this.initialState;
+    this.setState({ inputConfig: config });
+      this.redirect(path);
     });
   };
 
-  redirect() {
-    let config = this.initialState;
-    this.setState({ inputConfig: config });
-    this.context.router.history.push("/");
+  redirect(path) {
+    this.context.router.history.push(path);
+  }
+
+  editUserHandler=(event,id)=>{
+    event.preventDefault();
+    //find user
+    let selectedUser=this.state.users.filter(user=>{
+      if(user.id===id){
+      return user
+    }})
+    //set user data in config
+    
+    this.setState({user:selectedUser})
+    let path='/:'+id
+    this.redirect(path)
   }
 
   render() {
+    
     return (
       <div className="App">
         <Layout>
           <Route
             path="/"
             exact
-            render={props => <Users {...props} data={this.state.users} />}
+            render={props => <Users {...props} data={this.state.users} editUser={this.editUserHandler}/>}
           />
           <Route
             path="/addNew"
@@ -164,7 +182,16 @@ class App extends Component {
               />
             )}
           />
-          {/*<Route path="/:id" component={EditUser}/>*/}
+          <Route path="/:id" render={props => (
+              <EditUser
+                {...props}
+                data={this.state.users}
+                config={this.state.inputConfig}
+                modifyUser={this.modifyUserDataHandler}
+                changeInputValues={this.changeInputValuesHandler}
+              />
+            )}
+          />
         </Layout>
       </div>
     );
