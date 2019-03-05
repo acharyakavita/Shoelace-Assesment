@@ -18,80 +18,107 @@ class App extends Component {
         isActive: true
       }
     ],
-    inputConfig: {
-      name:{
-        label: "Name",
-        placeholder: "Enter Your Name",
-        elementType: "input",
-        inputType: "text",
-        value: "",
-        required: true,
-        touched: false,
-        valid:false
-      },
-      template:{
-        label: "Select Template",
-        elementType: "select",
-        options: [
-          { value: "Single Image Ad", displayValue: "Single Image Ad" },
-          { value: "Carousal Ad", displayValue: "Carousal Ad" }
-        ],
-        value: "Single Image Ad",
-        required: true,
-        valid: true,
-        touched: false
-      },
-      startDate:{
-        label: "Start Date",
-        elementType: "input",
-        inputType: "date",
-        value: "",
-        required: true,
-        valid: false,
-        touched: false
-      },
-      repeat:{
-        label: "Repeat",
-        elementType: "select",
-        options: [
-          { value: "Daily", displayValue: "Daily" },
-          { value: "Weekly", displayValue: "Weekly" },
-          { value: "Monthly", displayValue: "Monthly" }
-        ],
-        value: "Daily",
-        required: true,
-        valid: true,
-        touched: false
-      },
-      isActive:{
-        label: "Is User Active?",
-        elementType: "select",
-        options: [
-          { value: true, displayValue: "Yes" },
-          { value: false, displayValue: "No" },
-        ],
-        value: true,
-        required: true,
-        valid: true,
-        touched: false
-      }
-    }
-  };
+    formIsValid:false,
+    inputConfig:{}
+  }
 
-  changeInputValuesHandler=(event,id)=>{
-    let newValue=event.target.value
-    let newConfig={...this.state.inputConfig}
-    for (let element in newConfig){
-      if(element===id){
-        newConfig[id].value=newValue
-      }
-    }
-    this.setState({inputConfig:newConfig})
+  get initialState() {
+    return {
+        name:{
+          label: "Name",
+          placeholder: "Enter Your Name",
+          elementType: "input",
+          inputType: "text",
+          value: "",
+          required: true,
+          touched: false,
+          valid:false
+        },
+        template:{
+          label: "Select Template",
+          elementType: "select",
+          options: [
+            { value: "Single Image Ad", displayValue: "Single Image Ad" },
+            { value: "Carousal Ad", displayValue: "Carousal Ad" }
+          ],
+          value: "Single Image Ad",
+          required: true,
+          valid: true,
+          touched: false
+        },
+        startDate:{
+          label: "Start Date",
+          elementType: "input",
+          inputType: "date",
+          value: "",
+          required: true,
+          valid: false,
+          touched: false
+        },
+        repeat:{
+          label: "Repeat",
+          elementType: "select",
+          options: [
+            { value: "Daily", displayValue: "Daily" },
+            { value: "Weekly", displayValue: "Weekly" },
+            { value: "Monthly", displayValue: "Monthly" }
+          ],
+          value: "Daily",
+          required: true,
+          valid: true,
+          touched: false
+        },
+        isActive:{
+          label: "Is User Active?",
+          elementType: "select",
+          options: [
+            { value: true, displayValue: "Yes" },
+            { value: false, displayValue: "No" },
+          ],
+          value: true,
+          required: true,
+          valid: true,
+          touched: false
+        }
+    };
+  }
+
+  componentWillMount(){
+    let config=this.initialState
+    this.setState({inputConfig:config})
+    
   }
 
   static contextTypes = {
     router: PropTypes.object,
   }
+  
+  changeInputValuesHandler=(event,id)=>{
+    let newValue=event.target.value
+    let newConfig={...this.state.inputConfig}
+    newConfig[id].value=newValue
+    newConfig[id].touched=true
+    if(newConfig[id].valid===false){
+      newConfig[id].valid=this.checkValidity(newConfig[id].value,newConfig[id].required)
+    }
+    
+    let formIsValid=true;
+    formIsValid=newConfig[id].valid  && formIsValid
+    this.setState({inputConfig:newConfig,formIsValid:formIsValid})
+  }
+
+ 
+  newMethod() {
+    return this;
+  }
+
+  checkValidity(value,rules){
+    let isValid=true;
+    if(rules.required){
+        isValid=value.trim()!=='' && isValid;
+    }
+    return isValid;
+}
 
   addNewUserHandler=(event)=>{
     event.preventDefault();
@@ -113,8 +140,11 @@ class App extends Component {
   }
 
   redirect(){
+    let config=this.initialState
+    this.setState({inputConfig:config})
     this.context.router.history.push('/')
   }
+  
   render() {
     return (
       <div className="App">
