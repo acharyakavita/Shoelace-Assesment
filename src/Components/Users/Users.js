@@ -1,40 +1,22 @@
-import React, { Component } from "react";
-import Button from "../../Components/Button/Button.js";
-class App extends Component {
-  state = {
-    users: [
-      {
-        name: "Dave J",
-        template: "Single Image Ad",
-        startDate: "2018-01-01",
-        repeat: "Daily",
-        isActive: true
-      }
-    ]
-  };
+import React from "react";
+import User from './User/User';
+import Classes from './Users.css';
 
-
-  render() {
+const users =(props)=>{
     let userData=null;
-    if(this.state.users.length>0){
-        userData=this.state.users.map(user=>{
+    if(props.data.length>0){
+        userData=props.data.map(user=>{
             return(
-                <div>
-                <p>{user.name}</p>
-                </div>
-            )
+                <User data={user}/>)
         })
     }
     
     return (
-      <div>
-        <div>
-          
-        </div>
+      <div className={Classes.Users}>
         {userData}
       </div>
     );
   }
-}
 
-export default App;
+
+export default users;
