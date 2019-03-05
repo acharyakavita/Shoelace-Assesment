@@ -13,9 +13,13 @@ const form = props => {
   }
 
   let formData = formElementsArray.map(element => {
-    return <Input key={element.id} config={element.config} />;
+    console.log(<Input key={element.id} config={element.config} 
+        changed={event=>props.changeInputValues(event,element.id)}/>)
+    return <Input key={element.id} config={element.config} 
+    changed={event=>props.changeInputValues(event,element.id)} />;
   });
 
+  
   return (
     <form className={Classes.Form} onSubmit={props.addNewUSer}>
       <h3>Enter User Data</h3>

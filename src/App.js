@@ -77,10 +77,25 @@ class App extends Component {
     }
   };
 
+  changeInputValuesHandler=(event,id)=>{
+    let newValue=event.target.value
+    let newConfig={...this.state.inputConfig}
+    for (let element in newConfig){
+      if(element===id){
+        newConfig[id].value=newValue
+      }
+    }
+    this.setState({inputConfig:newConfig})
+  }
+
   addNewUserHandler=(event)=>{
+    console.log('hi')
     event.preventDefault();
     let newUser={}
     newUser.id=new Date().getTime();
+    let newConfig={...this.state.config}
+    console.log(newConfig)
+    //for(let element in this.state.config )
     /*newUser.name=this.state.inputConfig[0].value;
     template: "Single Image Ad",
     startDate: "2018-01-01",
@@ -106,6 +121,7 @@ class App extends Component {
                 data={this.state.users}
                 config={this.state.inputConfig}
                 addNewUSer={this.addNewUserHandler}
+                changeInputValues={this.changeInputValuesHandler}
               />
             )}
           />
