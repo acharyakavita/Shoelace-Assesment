@@ -5,7 +5,10 @@ import Classes from "./EditUser.css";
 const editUser= props => {
   let buttonData='Modify User'
   return <div className={Classes.EditUser}>
-  <Form config={props.config} changeInputValues={props.changeInputValues} handleUser={props.modifyUser} button={buttonData}/>
+  <Form config={props.config} changeInputValues={props.changeInputValues} 
+  handleUser={props.modifyUser} button={buttonData}
+  disabled={props.disabled}
+  back={props.back}/>
   </div>;
 };
 

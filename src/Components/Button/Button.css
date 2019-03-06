@@ -7,3 +7,8 @@
     font-weight:bold;
     border-radius:3%;
 }
+
+.Button:disabled {
+    color:#ccc;
+    cursor:not-allowed;
+}

@@ -4,7 +4,7 @@ import classes from './Input.css';
 const input = (props) => {
     let inputElement = null;
     const inputClasses = [classes.InputElement]
-    if (props.config.valid===false && props.shouldValidate && props.touched) {
+    if (props.invalid && props.shouldValidate && props.touched) {
         inputClasses.push(classes.Invalid)
     }
     
@@ -15,7 +15,8 @@ const input = (props) => {
             placeholder={props.config.placeholder} 
             value={props.config.value} 
             required={props.config.required}
-            onChange={props.changed} />;
+            onChange={props.changed} 
+            />;
             break;
         case 'select':
             inputElement = (<select className={inputClasses.join(' ')} 
@@ -31,8 +32,8 @@ const input = (props) => {
     }
 
     let validationError = null;
-    if (props.valid===false && props.touched===true) {
-        validationError = <p className={classes.ValidationError}>Please enter a valid {props.config.placeholder}</p>;
+    if (props.invalid && props.touched) {
+        validationError = <p className={classes.ValidationError}>Please enter a valid {props.config.label}</p>;
     }
     return (
         <div className={classes.Input}>

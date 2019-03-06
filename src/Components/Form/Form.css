@@ -8,6 +8,9 @@
     text-align: center;
 }
 
+.Button button {
+    margin:2%;
+}
 @media screen and (max-width:800px){
     .Form{
         width:90%;

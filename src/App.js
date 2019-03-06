@@ -21,7 +21,8 @@ class App extends Component {
     ],
     formIsValid: false,
     inputConfig: {},
-    user: {}
+    user: {},
+    updateFlag:false
   };
 
   get initialState() {
@@ -33,8 +34,8 @@ class App extends Component {
         inputType: "text",
         value: "",
         required: true,
-        touched: false,
-        valid: false
+        valid: false,
+        touched: false
       },
       template: {
         label: "Select Template",
@@ -44,7 +45,7 @@ class App extends Component {
           { value: "Carousal Ad", displayValue: "Carousal Ad" }
         ],
         value: "Single Image Ad",
-        required: true,
+        required: false,
         valid: true,
         touched: false
       },
@@ -66,7 +67,7 @@ class App extends Component {
           { value: "Monthly", displayValue: "Monthly" }
         ],
         value: "Daily",
-        required: true,
+        required: false,
         valid: true,
         touched: false
       },
@@ -100,7 +101,7 @@ class App extends Component {
     newConfig[id].value = newValue;
     newConfig[id].touched = true;
     if (newConfig[id].valid === false) {
-      newConfig[id].valid = this.checkValidity(
+        newConfig[id].valid = this.checkValidity(
         newConfig[id].value,
         newConfig[id].required
       );
@@ -111,14 +112,26 @@ class App extends Component {
     this.setState({ inputConfig: newConfig, formIsValid: formIsValid });
   };
 
-  checkValidity(value, rules) {
+  checkValidity(value, required) {
     let isValid = true;
-    if (rules.required) {
+    if (required) {
       isValid = value.trim() !== "" && isValid;
     }
     return isValid;
   }
 
+  getTodaysDate(){
+    let date=new Date()
+      let month=Number(date.getMonth()+1)
+      if(month<10 ){
+        month='0'+month
+      }
+      let day=date.getDate()
+      if(day<10 ){
+        day='0'+date.getDate()
+      }
+      return date.getFullYear() + "-" + month + "-"  + day
+  }
   addNewUserHandler = event => {
     event.preventDefault();
     let newUser = {};
@@ -128,7 +141,8 @@ class App extends Component {
       newUser[element] = newConfig[element].value;
     }
     if (newUser.startDate === "") {
-      newUser.startDate = new Date().toISOString().slice(0, 10);
+      
+      newUser.startDate=this.getTodaysDate()
     }
 
     let combinedUsers = [...this.state.users];
@@ -136,7 +150,7 @@ class App extends Component {
     this.setState({ users: combinedUsers }, () => {
       let path = "/";
       let config = this.initialState;
-      this.setState({ inputConfig: config });
+      this.setState({ inputConfig: config, formIsValid: false });
       this.redirect(path);
     });
   };
@@ -163,7 +177,7 @@ class App extends Component {
         config[element].value = selectedUserObj[element];
       }
     }
-    this.setState({ inputConfig: config, user: selectedUserObj });
+    this.setState({ inputConfig: config, user: selectedUserObj,updateFlag:true });
     let path = "/:" + id;
     this.redirect(path);
   };
@@ -185,14 +199,37 @@ class App extends Component {
     }
 
     this.setState({ users: updatedUsers }, () => {
-      let path = "/";
       let config = this.initialState;
-      this.setState({ inputConfig: config });
-      this.redirect(path);
+      this.setState({ inputConfig: config ,updateFlag:false});
+        this.redirect('/');
     });
   };
 
+  backButtonHandler=(event)=>{
+    event.preventDefault()
+    let config = this.initialState;
+    this.setState({ inputConfig: config ,updateFlag:false});
+      this.redirect('/');
+  }
+
   render() {
+    let editRoute=null;
+    if(this.state.updateFlag){
+      editRoute=<Route
+      path="/:id"
+      render={props => (
+        <EditUser
+          {...props}
+          data={this.state.users}
+          config={this.state.inputConfig}
+          modifyUser={this.modifyUserDataHandler}
+          changeInputValues={this.changeInputValuesHandler}
+          disabled={!this.state.formIsValid}
+          back={this.backButtonHandler}
+        />
+      )}
+    />
+    }
     return (
       <div className="App">
         <Layout>
@@ -217,21 +254,12 @@ class App extends Component {
                 config={this.state.inputConfig}
                 addNewUSer={this.addNewUserHandler}
                 changeInputValues={this.changeInputValuesHandler}
+                disabled={!this.state.formIsValid}
+                back={this.backButtonHandler}
               />
             )}
           />
-          <Route
-            path="/:id"
-            render={props => (
-              <EditUser
-                {...props}
-                data={this.state.users}
-                config={this.state.inputConfig}
-                modifyUser={this.modifyUserDataHandler}
-                changeInputValues={this.changeInputValuesHandler}
-              />
-            )}
-          />
+          {editRoute}    
         </Layout>
       </div>
     );

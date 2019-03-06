@@ -14,16 +14,20 @@ const form = props => {
 
   let formData = formElementsArray.map(element => {
     return <Input key={element.id} config={element.config} 
-    changed={event=>props.changeInputValues(event,element.id)} />;
+            changed={event=>props.changeInputValues(event,element.id)}
+            invalid={!element.config.valid}
+            shouldValidate={element.config.required}
+            touched={element.config.touched} />;
   });
 
   
   return (
-    <form className={Classes.Form} onSubmit={props.addNewUSer}>
+    <form className={Classes.Form} onSubmit={props.handleUser} method='POST'>
       <h3>Enter User Data</h3>
       {formData}
       <div className={Classes.Button}>
-        <Button click={props.handleUser}>{props.button}</Button>
+        <Button disabled={props.disabled}>{props.button}</Button>
+        <Button click={props.back}>Back</Button>
       </div>
     </form>
   );
