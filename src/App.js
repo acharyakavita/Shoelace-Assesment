@@ -21,7 +21,6 @@ class App extends Component {
     ],
     formIsValid: false,
     inputConfig: {},
-    user:{}
   };
 
   get initialState() {
@@ -148,17 +147,31 @@ class App extends Component {
   editUserHandler=(event,id)=>{
     event.preventDefault();
     //find user
-    let selectedUser=this.state.users.filter(user=>{
+    let selectedUser=[]
+    this.state.users.forEach(user => {
       if(user.id===id){
-      return user
-    }})
+        selectedUser.push(user)
+      }
+    });
+    let selectedUserObj=Object.assign({},selectedUser[0])
+
     //set user data in config
-    
-    this.setState({user:selectedUser})
+    let config={...this.state.inputConfig}
+    for(let element in config){
+      if(selectedUserObj[element]){
+        config[element].value=selectedUserObj[element]
+      }
+    }
+    this.setState({inputConfig:config})
     let path='/:'+id
     this.redirect(path)
   }
 
+
+  modifyUserDataHandler=(event)=>{
+
+  }
+  
   render() {
     
     return (
