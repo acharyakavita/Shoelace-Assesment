@@ -1,8 +1,9 @@
 import React from "react";
 import Classes from "./NavigationItems.css";
-import NavigationItem from './NavigationItem/NavigationItem';
+import NavigationItem from "./NavigationItem/NavigationItem";
 
 const navigationItems = props => {
+  //nav list
   return (
     <ul className={Classes.NavigationItems}>
       <NavigationItem link="/">Users</NavigationItem>

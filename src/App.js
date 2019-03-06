@@ -8,6 +8,7 @@ import { Route } from "react-router-dom";
 import PropTypes from "prop-types";
 
 class App extends Component {
+  //initial state
   state = {
     users: [
       {
@@ -22,9 +23,12 @@ class App extends Component {
     formIsValid: false,
     inputConfig: {},
     user: {},
-    updateFlag:false
+    updateFlag: false
   };
 
+
+  //Form input fields configuration settings
+  //I have written inside initialState() method so as to reset the form to its initial values ,after update/new User add 
   get initialState() {
     return {
       name: {
@@ -86,22 +90,27 @@ class App extends Component {
     };
   }
 
+  //set initial config items
   componentWillMount() {
     let config = this.initialState;
     this.setState({ inputConfig: config });
   }
 
+  //set context type 
   static contextTypes = {
     router: PropTypes.object
   };
 
+  //Input values change handler
+  //Here I have set event.target.value to corresponding input config object key after doing some validations on blank input
   changeInputValuesHandler = (event, id) => {
+
     let newValue = event.target.value;
     let newConfig = { ...this.state.inputConfig };
     newConfig[id].value = newValue;
     newConfig[id].touched = true;
     if (newConfig[id].valid === false) {
-        newConfig[id].valid = this.checkValidity(
+      newConfig[id].valid = this.checkValidity(
         newConfig[id].value,
         newConfig[id].required
       );
@@ -112,6 +121,7 @@ class App extends Component {
     this.setState({ inputConfig: newConfig, formIsValid: formIsValid });
   };
 
+  //input validation method
   checkValidity(value, required) {
     let isValid = true;
     if (required) {
@@ -120,19 +130,24 @@ class App extends Component {
     return isValid;
   }
 
-  getTodaysDate(){
-    let date=new Date()
-      let month=Number(date.getMonth()+1)
-      if(month<10 ){
-        month='0'+month
-      }
-      let day=date.getDate()
-      if(day<10 ){
-        day='0'+date.getDate()
-      }
-      return date.getFullYear() + "-" + month + "-"  + day
+  //return today's date
+  getTodaysDate() {
+    let date = new Date();
+    let month = Number(date.getMonth() + 1);
+    if (month < 10) {
+      month = "0" + month;
+    }
+    let day = date.getDate();
+    if (day < 10) {
+      day = "0" + date.getDate();
+    }
+    return date.getFullYear() + "-" + month + "-" + day;
   }
+
+  //Add's new user object to the existing users object
+  //Post addition,page is redirected to User's page
   addNewUserHandler = event => {
+
     event.preventDefault();
     let newUser = {};
     newUser.id = new Date().getTime();
@@ -141,8 +156,7 @@ class App extends Component {
       newUser[element] = newConfig[element].value;
     }
     if (newUser.startDate === "") {
-      
-      newUser.startDate=this.getTodaysDate()
+      newUser.startDate = this.getTodaysDate();
     }
 
     let combinedUsers = [...this.state.users];
@@ -155,10 +169,14 @@ class App extends Component {
     });
   };
 
+
+  //redirect method
   redirect(path) {
     this.context.router.history.push(path);
   }
 
+  //This method is called when user clicks on the modify button from User's page.
+  //Data of that user is retrieved using id and page is redirected to prefilled user edit page
   editUserHandler = (event, id) => {
     event.preventDefault();
     //find user
@@ -177,11 +195,16 @@ class App extends Component {
         config[element].value = selectedUserObj[element];
       }
     }
-    this.setState({ inputConfig: config, user: selectedUserObj,updateFlag:true });
+    this.setState({
+      inputConfig: config,
+      user: selectedUserObj,
+      updateFlag: true
+    });
     let path = "/:" + id;
     this.redirect(path);
   };
 
+  //Modified data will be updated in the main users object and page will be redirected to User's page
   modifyUserDataHandler = event => {
     event.preventDefault();
     let editedUser = { ...this.state.user };
@@ -200,36 +223,43 @@ class App extends Component {
 
     this.setState({ users: updatedUsers }, () => {
       let config = this.initialState;
-      this.setState({ inputConfig: config ,updateFlag:false});
-        this.redirect('/');
+      this.setState({ inputConfig: config, updateFlag: false });
+      this.redirect("/");
     });
   };
 
-  backButtonHandler=(event)=>{
-    event.preventDefault()
+  //Always redirects to user page if we dont want to update/add new user
+  backButtonHandler = event => {
+    event.preventDefault();
     let config = this.initialState;
-    this.setState({ inputConfig: config ,updateFlag:false});
-      this.redirect('/');
-  }
+    this.setState({ inputConfig: config, updateFlag: false });
+    this.redirect("/");
+  };
 
+  //render method
   render() {
-    let editRoute=null;
-    if(this.state.updateFlag){
-      editRoute=<Route
-      path="/:id"
-      render={props => (
-        <EditUser
-          {...props}
-          data={this.state.users}
-          config={this.state.inputConfig}
-          modifyUser={this.modifyUserDataHandler}
-          changeInputValues={this.changeInputValuesHandler}
-          disabled={!this.state.formIsValid}
-          back={this.backButtonHandler}
+  
+//Edit page is shown only if User modify is requested
+    let editRoute = null;
+    if (this.state.updateFlag) {
+      editRoute = (
+        <Route
+          path="/:id"
+          render={props => (
+            <EditUser
+              {...props}
+              data={this.state.users}
+              config={this.state.inputConfig}
+              modifyUser={this.modifyUserDataHandler}
+              changeInputValues={this.changeInputValuesHandler}
+              disabled={!this.state.formIsValid}
+              back={this.backButtonHandler}
+            />
+          )}
         />
-      )}
-    />
+      );
     }
+    //Routes for home and Add New User page
     return (
       <div className="App">
         <Layout>
@@ -259,7 +289,7 @@ class App extends Component {
               />
             )}
           />
-          {editRoute}    
+          {editRoute}
         </Layout>
       </div>
     );
