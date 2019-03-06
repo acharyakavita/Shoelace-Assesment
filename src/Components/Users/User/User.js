@@ -4,7 +4,7 @@ import Classes from "./User.css";
 
 const user = props => {
     let active=''
-    if(props.data.isActive){
+    if(props.data.isActive===true){
         active='Yes'
     }
     else {

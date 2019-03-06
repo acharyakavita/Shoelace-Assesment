@@ -21,6 +21,7 @@ class App extends Component {
     ],
     formIsValid: false,
     inputConfig: {},
+    user: {}
   };
 
   get initialState() {
@@ -133,9 +134,9 @@ class App extends Component {
     let combinedUsers = [...this.state.users];
     combinedUsers.push(newUser);
     this.setState({ users: combinedUsers }, () => {
-      let path='/'
-          let config = this.initialState;
-    this.setState({ inputConfig: config });
+      let path = "/";
+      let config = this.initialState;
+      this.setState({ inputConfig: config });
       this.redirect(path);
     });
   };
@@ -144,43 +145,67 @@ class App extends Component {
     this.context.router.history.push(path);
   }
 
-  editUserHandler=(event,id)=>{
+  editUserHandler = (event, id) => {
     event.preventDefault();
     //find user
-    let selectedUser=[]
+    let selectedUser = [];
     this.state.users.forEach(user => {
-      if(user.id===id){
-        selectedUser.push(user)
+      if (user.id === id) {
+        selectedUser.push(user);
       }
     });
-    let selectedUserObj=Object.assign({},selectedUser[0])
+    let selectedUserObj = Object.assign({}, selectedUser[0]);
 
     //set user data in config
-    let config={...this.state.inputConfig}
-    for(let element in config){
-      if(selectedUserObj[element]){
-        config[element].value=selectedUserObj[element]
+    let config = { ...this.state.inputConfig };
+    for (let element in config) {
+      if (selectedUserObj[element]) {
+        config[element].value = selectedUserObj[element];
       }
     }
-    this.setState({inputConfig:config})
-    let path='/:'+id
-    this.redirect(path)
-  }
+    this.setState({ inputConfig: config, user: selectedUserObj });
+    let path = "/:" + id;
+    this.redirect(path);
+  };
 
+  modifyUserDataHandler = event => {
+    event.preventDefault();
+    let editedUser = { ...this.state.user };
+    let updatedUsers = [...this.state.users];
+    let updatedConfig = { ...this.state.inputConfig };
 
-  modifyUserDataHandler=(event)=>{
+    for (let element of updatedUsers) {
+      if (element.id === editedUser.id) {
+        element.name = updatedConfig.name.value;
+        element.template = updatedConfig.template.value;
+        element.repeat = updatedConfig.repeat.value;
+        element.isActive = updatedConfig.isActive.value;
+        element.startDate = updatedConfig.startDate.value;
+      }
+    }
 
-  }
-  
+    this.setState({ users: updatedUsers }, () => {
+      let path = "/";
+      let config = this.initialState;
+      this.setState({ inputConfig: config });
+      this.redirect(path);
+    });
+  };
+
   render() {
-    
     return (
       <div className="App">
         <Layout>
           <Route
             path="/"
             exact
-            render={props => <Users {...props} data={this.state.users} editUser={this.editUserHandler}/>}
+            render={props => (
+              <Users
+                {...props}
+                data={this.state.users}
+                editUser={this.editUserHandler}
+              />
+            )}
           />
           <Route
             path="/addNew"
@@ -195,7 +220,9 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/:id" render={props => (
+          <Route
+            path="/:id"
+            render={props => (
               <EditUser
                 {...props}
                 data={this.state.users}
